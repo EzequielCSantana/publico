@@ -1,0 +1,3 @@
+link Swagger:
+http://appmodelo.opusnet.app.br/index.html
+Serial: ModeloApp

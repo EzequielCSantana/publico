@@ -1,0 +1,194 @@
+
+        [HttpPost]
+        [Route("LoginApp")]
+        public JsonResult LiginApp(string serial, string usuario,string senha)
+        {
+            List<Object> resultado = new List<object>();
+            if (serial == "ModeloApp")
+            {
+                try
+                {
+                    db _db = new db();
+                    _db.Servidor = _configuration.GetSection("dbWhatsApp").Value;
+                    _db.ScriptSql = " SP_APPLOGIN " +
+                         "'" + _db.StringSQL(usuario) + "'," +
+                         "'" + _db.StringSQL(senha )+ "'";
+                    var retorno = _db.TabelaReader();
+                    if (retorno.FieldCount > 0)
+                    {
+                        while (retorno.Read())
+                        {
+                            
+                                resultado.Add(new
+                                {
+                                    retorno = 1,
+                                    id = retorno["id"].ToString(),
+                                    usuario = retorno["usuario"].ToString(),
+                                    data = retorno["data"].ToString()
+                                });
+                           
+                        }
+                        if (resultado.Count == 0)
+                        {
+                            resultado.Add(new
+                            {
+                                retorno = 0
+                            });
+                        }
+                    }
+                    else
+                    {
+                        resultado.Add(new
+                        {
+                            retorno = 0
+                        });
+                    }
+                    _db.Fechar();
+                }
+                catch (Exception err)
+                {
+                    resultado.Add(new
+                    {
+                        retorno = 0
+                    });
+                }
+            }
+            else
+            {
+                resultado.Add(new
+                {
+                    retorno = 0
+                });
+            }
+            return Json(resultado);
+        }
+
+
+        [HttpPost]
+        [Route("TextoApp")]
+        public JsonResult TextoApp(string serial, string consulta)
+        {
+            List<Object> resultado = new List<object>();
+            if (serial == "ModeloApp")
+            {
+                try
+                {
+                    db _db = new db();
+                    _db.Servidor = _configuration.GetSection("dbWhatsApp").Value;
+                    _db.ScriptSql = " SP_APP_GET_TEXTO " +
+                         "'" + _db.StringSQL(consulta) + "'";
+                    var retorno = _db.TabelaReader();
+                    if (retorno.FieldCount > 0)
+                    {
+                        while (retorno.Read())
+                        {
+
+                            resultado.Add(new
+                            {
+                                retorno = 1,
+                                usuario = retorno["usuario"].ToString(),
+                                texto = retorno["texto"].ToString(),
+                                data = retorno["data"].ToString()
+                            });
+
+                        }
+                        if (resultado.Count == 0)
+                        {
+                            resultado.Add(new
+                            {
+                                retorno = 0
+                            });
+                        }
+                    }
+                    else
+                    {
+                        resultado.Add(new
+                        {
+                            retorno = 0
+                        });
+                    }
+                    _db.Fechar();
+                }
+                catch (Exception err)
+                {
+                    resultado.Add(new
+                    {
+                        retorno = 0
+                    });
+                }
+            }
+            else
+            {
+                resultado.Add(new
+                {
+                    retorno = 0
+                });
+            }
+            return Json(resultado);
+        }
+
+
+
+        [HttpPost]
+        [Route("SetTextoApp")]
+        public JsonResult SetTextoApp(string serial, int id, int usuario ,  string texto)
+        {
+            List<Object> resultado = new List<object>();
+            if (serial == "ModeloApp")
+            {
+                try
+                {
+                    db _db = new db();
+                    _db.Servidor = _configuration.GetSection("dbWhatsApp").Value;
+                    _db.ScriptSql = " SP_APP_SET_TEXTO " +
+                         "'" + id.ToString() + "'," +
+                         "'" + usuario.ToString() + "'," +
+                         "'" + _db.StringSQL(texto) + "'";
+                    var retorno = _db.TabelaReader();
+                    if (retorno.FieldCount > 0)
+                    {
+                        while (retorno.Read())
+                        {
+
+                            resultado.Add(new
+                            {
+                                retorno = 1,
+                                retornoMsg = retorno["retornoMsg"].ToString()
+                            });
+
+                        }
+                        if (resultado.Count == 0)
+                        {
+                            resultado.Add(new
+                            {
+                                retorno = 0
+                            });
+                        }
+                    }
+                    else
+                    {
+                        resultado.Add(new
+                        {
+                            retorno = 0
+                        });
+                    }
+                    _db.Fechar();
+                }
+                catch (Exception err)
+                {
+                    resultado.Add(new
+                    {
+                        retorno = 0
+                    });
+                }
+            }
+            else
+            {
+                resultado.Add(new
+                {
+                    retorno = 0
+                });
+            }
+            return Json(resultado);
+        }
+
